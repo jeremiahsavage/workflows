@@ -3,6 +3,11 @@
 class: Workflow
 
 inputs:
+  - id: "#bam_path"
+    type:
+      type: array
+      items: File
+
   - id: "#known_indel_vcf_path"
     type: File
   - id: "#known_snp_vcf_path"
@@ -35,7 +40,8 @@ steps:
   - id: "#gatk_realignertargetcreator"
     run: {import: ../../tools/gatk_realignertargetcreator.cwl.yaml}
     inputs:
-      - id: "#gatk_realignertargetcreator.input_bam_path"
+      - id: "#gatk__realignertargetcreator.input_bam_path"
+        source: "#bam_path"
       - id: "#gatk_realignertargetcreator.known_indel_vcf_path"
         source: "#known_indel_vcf_path"
       - id: "#gatk_realignertargetcreator.uuid"
@@ -53,7 +59,7 @@ steps:
     run: {import: ../../tools/gatk_indelrealigner.cwl.yaml}
     inputs:
       - id: "#gatk_indelrealigner.input_bam_path"
-        source: "#gatk_realignertargetcreator.input_bam_path"
+        source: "#bam_path"
       - id: "#gatk_indelrealigner.known_indel_vcf_path"
         source: "#known_indel_vcf_path"
       - id: "#gatk_indelrealigner.target_intervals_path"
