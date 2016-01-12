@@ -15,6 +15,20 @@ requirements:
 class: CommandLineTool
 
 inputs:
+  - id: "#input_bam_path"
+    type:
+      type: array
+      items: File
+      inputBinding:
+        prefix: --bam_path
+        secondaryFiles:
+          - engine: node-engine.cwl
+            script: |
+              {
+              return {"path": $self.path.slice(0,-4)+".bai", "class": "File"};
+              }
+
+              
   - id: "#reference_fasta_path"
     type: File
     inputBinding:
@@ -38,19 +52,6 @@ inputs:
       prefix: --known_indel_vcf_path
       secondaryFiles:
         - ".idx"
-
-  - id: "#input_bam_path"
-    type:
-      type: array
-      items: File
-      inputBinding:
-        prefix: --bam_path
-        secondaryFiles:
-          - engine: node-engine.cwl
-            script: |
-              {
-              return {"path": $self.path.slice(0,-4)+".bai", "class": "File"};
-              }
 
   - id: "#thread_count"
     type: string
